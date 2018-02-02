@@ -343,7 +343,7 @@ public:
   virtual void copy_component_to(Entity source, Entity target) = 0;
 };
 
-template <typename C>
+template <typename C, bool CopyConstructable = std::is_copy_constructible<C>::value>
 class ComponentHelper : public BaseComponentHelper {
 public:
   void remove_component(Entity e) override {
@@ -351,6 +351,16 @@ public:
   }
   void copy_component_to(Entity source, Entity target) override {
     target.assign_from_copy<C>(*(source.component<C>().get()));
+  }
+};
+
+template <typename C>
+class ComponentHelper<C,false> : public BaseComponentHelper {
+  void remove_component(Entity e) override {
+    e.remove<C>();
+  }
+  void copy_component_to(Entity source, Entity target) override {
+    assert("cannot copy component");
   }
 };
 
