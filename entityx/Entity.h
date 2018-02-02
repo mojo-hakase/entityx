@@ -360,7 +360,7 @@ class ComponentHelper<C,false> : public BaseComponentHelper {
     e.remove<C>();
   }
   void copy_component_to(Entity source, Entity target) override {
-    assert("cannot copy component");
+    assert(false && "cannot copy component");
   }
 };
 
